@@ -313,7 +313,7 @@ cldr_plurals_LDADD = libgettextsrc.la $(LDADD)
 
 # Use the dummy libtextstyle from gnulib, as libgettextpo does.
 LT_LIBTEXTSTYLE =
-AM_CPPFLAGS += -I../libgettextpo -I$(top_srcdir)/libgettextpo
+AM_CPPFLAGS += -I$(top_srcdir)/libgettextpo
 
 # How to build libgettextsrc.la.
 # Need ../gnulib-lib/libgettextlib.la.
