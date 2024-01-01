@@ -27,7 +27,18 @@
 #include <limits.h>
 #include <stdlib.h>
 
+#undef asprintf
+#undef vasprintf
+
 #include "vasnprintf.h"
+
+#if !(HAVE_VASPRINTF && HAVE_POSIX_PRINTF)
+
+/* Define to the same symbols as in lib-asprintf.h.  */
+#define asprintf libasprintf_asprintf
+#define vasprintf libasprintf_vasprintf
+
+#endif
 
 /* Some systems, like OSF/1 4.0 and Woe32, don't have EOVERFLOW.  */
 #ifndef EOVERFLOW
