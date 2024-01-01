@@ -255,7 +255,8 @@ file_ostream_get_stdio_stream (file_ostream_t stream)
 static inline file_ostream_t
 file_ostream_create (FILE *fp)
 {
-  return fp;
+  /* Closing the stream we return should not close 'fp'.  */
+  return fdopen (dup (fileno (fp)), "w");
 }
 
 static inline bool
@@ -673,19 +674,35 @@ noop_styled_ostream_is_owning_destination (_GL_ATTRIBUTE_MAYBE_UNUSED noop_style
   return true;
 }
 
-static inline noop_styled_ostream_t
-noop_styled_ostream_create (ostream_t destination, bool pass_ownership)
-{
-  if (!pass_ownership)
-    /* Not supported without the real libtextstyle.  */
-    abort ();
-  return destination;
-}
 
 static inline bool
 is_instance_of_noop_styled_ostream (_GL_ATTRIBUTE_MAYBE_UNUSED ostream_t stream)
 {
   return false;
+}
+
+/* ----------------------- From noop-styled-ostream.h ----------------------- */
+
+/* noop_styled_ostream_t is a subtype of ostream_t.  */
+typedef ostream_t noop_styled_ostream_t;
+
+#define noop_styled_ostream_write_mem ostream_write_mem
+#define noop_styled_ostream_flush ostream_flush
+#define noop_styled_ostream_free ostream_free
+#define noop_styled_ostream_begin_use_class styled_ostream_begin_use_class
+#define noop_styled_ostream_end_use_class styled_ostream_end_use_class
+#define noop_styled_ostream_get_hyperlink_ref styled_ostream_get_hyperlink_ref
+#define noop_styled_ostream_get_hyperlink_id styled_ostream_get_hyperlink_id
+#define noop_styled_ostream_set_hyperlink styled_ostream_set_hyperlink
+#define noop_styled_ostream_flush_to_current_style styled_ostream_flush_to_current_style
+
+static inline ostream_t
+noop_styled_ostream_create (ostream_t destination, bool pass_ownership)
+{
+  if (pass_ownership)
+    return destination;
+  else
+    return fdopen (dup (fileno (destination)), "w");
 }
 
 /* ------------------------------ From color.h ------------------------------ */

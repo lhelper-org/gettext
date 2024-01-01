@@ -311,19 +311,9 @@ cldr_plurals_SOURCES = cldr-plural.y cldr-plural-exp.c cldr-plurals.c
 cldr_plurals_CFLAGS = $(AM_CFLAGS) $(INCXML)
 cldr_plurals_LDADD = libgettextsrc.la $(LDADD)
 
-if USE_INSTALLED_LIBTEXTSTYLE
-LT_LIBTEXTSTYLE = @LTLIBTEXTSTYLE@
-else
-# How to get the include files of libtextstyle.
-textstyle.h textstyle/stdbool.h textstyle/version.h textstyle/woe32dll.h:
-	here=`pwd`; \
-	cd ../../libtextstyle/lib && \
-	  $(MAKE) install-nobase_includeHEADERS install-nobase_nodist_includeHEADERS includedir="$$here"
-BUILT_SOURCES    += textstyle.h textstyle/stdbool.h textstyle/version.h textstyle/woe32dll.h
-MOSTLYCLEANFILES += textstyle.h textstyle/stdbool.h textstyle/version.h textstyle/woe32dll.h
-# Where to find the built libtextstyle library.
-LT_LIBTEXTSTYLE = ../../libtextstyle/lib/libtextstyle.la
-endif
+# Use the dummy libtextstyle from gnulib, as libgettextpo does.
+LT_LIBTEXTSTYLE =
+AM_CPPFLAGS += -I../libgettextpo -I$(top_srcdir)/libgettextpo
 
 # How to build libgettextsrc.la.
 # Need ../gnulib-lib/libgettextlib.la.
