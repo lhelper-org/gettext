@@ -72,6 +72,10 @@
 # endif
 #endif
 
+#ifdef _WIN32
+# define fsync _commit
+#endif
+
 /* ----------------------------- From ostream.h ----------------------------- */
 
 /* Describes the scope of a flush operation.  */
