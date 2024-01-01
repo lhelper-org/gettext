@@ -30,9 +30,9 @@
 # include <unistd.h>
 #endif
 
+#undef pthread_sigmask
 int
 pthread_sigmask (int how, const sigset_t *new_mask, sigset_t *old_mask)
-#undef pthread_sigmask
 {
 #if HAVE_PTHREAD_SIGMASK
   int ret;
